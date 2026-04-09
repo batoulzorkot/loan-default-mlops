@@ -47,7 +47,7 @@ jobs:
 
       - name: docker login
         run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
 
       - name: Get current date
         id: date
