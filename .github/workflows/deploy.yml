@@ -28,7 +28,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag & push image to ECR
         id: build-image
@@ -43,7 +43,7 @@ jobs:
       - name: Download and clean ECS task definition
         run: |
           aws ecs describe-task-definition --task-definition mlops-task --query taskDefinition > raw.json
-          python3 -c "
+          python3 << 'EOF'
 import json
 with open('raw.json') as f:
     t = json.load(f)
@@ -51,7 +51,7 @@ for k in ['taskDefinitionArn','revision','status','requiresAttributes','compatib
     t.pop(k, None)
 with open('task-definition.json','w') as f:
     json.dump(t, f)
-"
+EOF
 
       - name: Update ECS task definition with new image
         id: task-def
@@ -62,7 +62,7 @@ with open('task-definition.json','w') as f:
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
