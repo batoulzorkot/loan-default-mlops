@@ -7,8 +7,8 @@ on:
 env:
   AWS_REGION: eu-north-1
   ECR_REPOSITORY: mlops-loan-app
-  ECS_SERVICE: mlops-service
-  ECS_CLUSTER: mlops-cluster
+  ECS_SERVICE: mlops-task-service-a8m05kjs
+  ECS_CLUSTER: extroverted-tiger-b8ijhg
   CONTAINER_NAME: mlops-app
 
 jobs:
@@ -43,15 +43,7 @@ jobs:
       - name: Download and clean ECS task definition
         run: |
           aws ecs describe-task-definition --task-definition mlops-task --query taskDefinition > raw.json
-          python3 << 'EOF'
-import json
-with open('raw.json') as f:
-    t = json.load(f)
-for k in ['taskDefinitionArn','revision','status','requiresAttributes','compatibilities','registeredAt','registeredBy','enableFaultInjection']:
-    t.pop(k, None)
-with open('task-definition.json','w') as f:
-    json.dump(t, f)
-EOF
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy, .enableFaultInjection)' raw.json > task-definition.json
 
       - name: Update ECS task definition with new image
         id: task-def
