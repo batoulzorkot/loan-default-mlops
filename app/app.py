@@ -19,11 +19,11 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,700&display=swap');
 
 :root {
-    --primary: #0F172A;
-    --accent: #2563EB;
-    --text-muted: #64748B;
-    --bg-light: #F8FAFC;
-    --border: #E2E8F0;
+    --primary: #F8FAFC;
+    --accent: #60A5FA;
+    --text-muted: #94A3B8;
+    --bg-light: #0F172A;
+    --border: #1E293B;
 }
 
 *, html, body, [class*="css"] {
@@ -31,6 +31,10 @@ st.markdown("""
 }
 
 .stApp { background-color: var(--bg-light); }
+
+h1, h2, h3 { color: #F8FAFC !important; }
+
+p, label, span { color: #CBD5E1 !important; }
 
 h1, h2, h3 {
     font-family: 'Fraunces', serif !important;
